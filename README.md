@@ -29,6 +29,9 @@ In short, it takes any information given by the serial port, except commands, an
 | **INFO**          | None |Print system information.                                                 |
 | **?**             | None |Display help.                                                             |
 
+## To do
+- **ESP32 support**
+- **Support for multiple receivers**
 ## Pre-compiled Binaries
 
 Download pre-compiled binaries for ESP12E/F and ESP-01S:  

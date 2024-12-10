@@ -1,4 +1,4 @@
-# EspnowUARTBridge for ESP8266
+# EspnowUARTBridge for ESP8266 
 
 Receiver/transmitter based on the ESP-NOW protocol.
 
@@ -7,6 +7,10 @@ It uses a serial interface as a data source and can be configured using commands
 ## How it works?
 
 In short, it takes any information given by the serial port, except commands, and sends it to the indicated receiver or to anything within range.
+
+##What can this be used for ?
+Personally, I created this as a solution to the problem of esphome not being compatible with espnow.
+
 
 ## Features
 

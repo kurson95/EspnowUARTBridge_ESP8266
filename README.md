@@ -22,5 +22,6 @@ In short, it takes any information given by the serial port, except commands, an
 </dl>
 <h1>Pre-compiled binaries</h1>
 Download pre-compiled binaries for ESP12E/F and ESP-01S
+https://github.com/kurson95/EspnowUARTBridge_ESP8266/releases/
  
 

@@ -1,28 +1,23 @@
-name: C/C++ CI
-
+name: Build PlatformIO project
 on:
+  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - name: Setup PlatformIO
-  # You may pin to the exact commit or the version.
-  # uses: n-vr/setup-platformio-action@ef5952e6a4d30c219158b781a84d31b018549c20
-      uses: n-vr/setup-platformio-action@v1.0.1
+      # Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v2
       
-          
-    - name: PlatformIO Run
-  # You may pin to the exact commit or the version.
-  # uses: karniv00l/platformio-run-action@e6467e68a40b381568bad448faf0a1413c72fc7f
-      uses: karniv00l/platformio-run-action@v1.1.2
-      with:
-        environments: "esp12e,esp01_1m"
-        targets: "esp12e,esp01_1m"
-        project-dir: "/home/runner/work/EspnowUARTBridge_ESP8266/"
+      # Setup PlatformIO in PATH
+      - name: Setup PlatformIO
+        uses: n-vr/setup-platformio-action@v1
+      
+      # Build the PlatformIO project
+      - name: Build PlatformIO project
+        run: pio run

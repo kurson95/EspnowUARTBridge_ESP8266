@@ -16,5 +16,8 @@ jobs:
   # You may pin to the exact commit or the version.
   # uses: karniv00l/platformio-run-action@e6467e68a40b381568bad448faf0a1413c72fc7f
       uses: karniv00l/platformio-run-action@v1.1.2
-   
+      with:
+        environments: "esp12e,esp01_1m"
+        targets: "esp12e,esp01_1m"
+        project-dir: "./"
           

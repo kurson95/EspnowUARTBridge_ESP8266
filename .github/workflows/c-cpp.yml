@@ -25,4 +25,4 @@ jobs:
       with:
         environments: "esp12e,esp01_1m"
         targets: "esp12e,esp01_1m"
-          
+        project-dir: "/home/runner/work/EspnowUARTBridge_ESP8266/"

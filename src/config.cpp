@@ -1,4 +1,6 @@
 #include "config.h"
+const char* PRIMARY_MASTER_KEY = "YM@2&YTEH38pHp6t";
+const char* LOCAL_MASTER_KEY = "$7FQ4x!UwTohBk&y";
 Preferences preferences;
 long BAUD_RATE;
 uint8_t defaultAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -14,4 +16,7 @@ String mac;
 String success;
 data inmsg;
 const long allowedBaudRates[] = {300, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200, 230400, 250000};
+String commandString[] = {"ADDRECV","RESRECV","SETBR","RST","HELP","REJECTUNPAIRED","INFO","SETCHAN"};
+const byte commandCount = sizeof(commandString) / sizeof(commandString[0]);
+
 data outmsg;

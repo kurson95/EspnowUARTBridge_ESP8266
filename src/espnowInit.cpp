@@ -1,7 +1,6 @@
 #include "espnowInit.h"
 #include "config.h"
-const char* PRIMARY_MASTER_KEY = "YM@2&YTEH38pHp6t";
-const char* LOCAL_MASTER_KEY = "$7FQ4x!UwTohBk&y";
+
 #ifdef ESP32
 
 esp_now_peer_info_t peerInfo;
@@ -50,7 +49,7 @@ void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len)
       digitalWrite(LED_BUILTIN, LOW);
       memset(msg, 0, sizeof(msg));
     }
-    if(privmodeENA && !compareMACs(LastConnAddress, broadcastAddress))
+    if (privmodeENA && !compareMACs(LastConnAddress, broadcastAddress))
     {
       sendMsg(LastConnAddress, (uint8_t *)"MSG NACK", ACK);
     }
@@ -100,7 +99,7 @@ void OnDataRecv(uint8_t *mac, uint8_t *incomingData, uint8_t len)
       digitalWrite(LED_BUILTIN, LOW);
       memset(msg, 0, sizeof(msg));
     }
-    if(privmodeENA && !compareMACs(LastConnAddress, broadcastAddress))
+    if (privmodeENA && !compareMACs(LastConnAddress, broadcastAddress))
     {
       sendMsg(LastConnAddress, (uint8_t *)"MSG NACK", ACK);
     }
@@ -138,10 +137,11 @@ void setupWiFi()
 }
 void espnowinit()
 {
+ 
 #ifdef ESP32
 
-  esp_now_set_pmk((uint8_t *) PRIMARY_MASTER_KEY);
-  peerInfo.channel = 0;  
+  esp_now_set_pmk((uint8_t *)PRIMARY_MASTER_KEY);
+  peerInfo.channel = 0;
   peerInfo.encrypt = true;
   memcpy(peerInfo.lmk, LOCAL_MASTER_KEY, 16);
   memcpy(peerInfo.peer_addr, broadcastAddress, 6);
@@ -160,8 +160,8 @@ void espnowinit()
   esp_now_register_recv_cb(esp_now_recv_cb_t(OnDataRecv));
 #elif defined(ESP8266)
   esp_now_set_self_role(ESP_NOW_ROLE_COMBO);
-  esp_now_set_kok((uint8_t *) PRIMARY_MASTER_KEY, 16);
-  esp_now_add_peer(broadcastAddress, ESP_NOW_ROLE_COMBO, 1, (uint8_t *) LOCAL_MASTER_KEY, 16);
+  esp_now_set_kok((uint8_t *)PRIMARY_MASTER_KEY, 16);
+  esp_now_add_peer(broadcastAddress, ESP_NOW_ROLE_COMBO, 1, (uint8_t *)LOCAL_MASTER_KEY, 16);
   esp_now_register_send_cb(OnDataSent);
   esp_now_register_recv_cb(OnDataRecv);
 #endif

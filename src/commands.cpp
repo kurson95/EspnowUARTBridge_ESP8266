@@ -12,7 +12,7 @@ void reset()
 void addrecv(String input)
 {
   preferences.begin("espnow", false);
-  String macString = input.substring(8);
+  String macString = input /*.substring(8)*/;
   uint8_t newmac[6];
   if (isValidMAC(macString) && stringToMAC(macString, newmac))
   {
@@ -73,11 +73,11 @@ void printinfo()
   privmodeENA = preferences.getBool("privmode", false);
   Serial.println("ESPNow UART bridge version 1.0");
   Serial.print("LAST REBOOT REASON: ");
-  #ifdef ESP32
+#ifdef ESP32
   Serial.println(esp_reset_reason());
-  #elif defined(ESP8266)
+#elif defined(ESP8266)
   Serial.println(ESP.getResetReason());
-  #endif
+#endif
   Serial.print("BAUD RATE: ");
   Serial.println(BAUD_RATE);
   Serial.print("SDK: ");
@@ -85,9 +85,7 @@ void printinfo()
   Serial.print("CHIP: ");
   Serial.println(id);
   Serial.print("REJECT UNKNOWN: ");
-
   Serial.println(preferences.getBool("privmode"));
-
   Serial.print("CPUFREQ: ");
   Serial.print(ESP.getCpuFreqMHz());
   Serial.println("Mhz");
@@ -106,12 +104,11 @@ void resrecv()
   saveMacAddress(defaultAddress);
   preferences.putBool("privmode", false);
   preferences.end();
-  Serial.println("Reject unknown: OFF");
+  Serial.println("REJECT UNKNOWN: OFF");
   reset();
 }
 void setbr(String input)
 {
-
-  long baud = input.substring(6).toInt();
+  long baud = input /*.substring(6)*/.toInt();
   setBaudRate(baud);
 }

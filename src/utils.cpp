@@ -96,30 +96,33 @@ void bridgeLoop() // handles serial input
     String input = Serial.readStringUntil('\n'); // Odczyt danych do końca linii
     input.trim();                                // Usunięcie białych znaków
     Serial.println("INPUT >> " + input);
-    if (input.startsWith("ADDRECV"))
+    int spaceIndex = input.indexOf(' ');
+    String commandStr = (spaceIndex == -1) ? input : input.substring(0, spaceIndex);
+    String arguments = (spaceIndex == -1) ? "" : input.substring(spaceIndex + 1);
+    command cmd = handleCommands(commandStr);
+    switch (cmd)
     {
-      addrecv(input);
-    }
-    else if (input.startsWith("RESRECV"))
-    {
+    case ADDRECV:
+      addrecv(arguments);
+      break;
+    case RESRECV:
       resrecv();
-    }
-    else if (input.startsWith("RST"))
-    {
+      break;
+    case SETBR:
+      setbr(arguments);
+      break;
+    case RST:
       reset();
-    }
-    else if (input.startsWith("?"))
-    {
+      break;
+    case HELP:
       Serial.println("ADDRECV FF:FF:FF:FF:FF:FF - Allow to specify mac address of receiver.\nRESRECV - Resets receiver address to default (broadcast mode).\nRST - reboot ESP.\n? - help.\nINFO - Show device info.\nREJECTUNPAIRED true/false - accept or reject data from unknown peer.\nSETBR - Set baud rate.\n");
-    }
-    else if (input.startsWith("REJECTUNPAIRED"))
-    {
-      String mode = input.substring(15);
-      if (mode == "true" || mode == "1")
+      break;
+    case REJECTUNPAIRED:
+      if (arguments == "true" || arguments == "1")
       {
         privmode(1);
       }
-      else if (mode == "false" || mode == "0")
+      else if (arguments == "false" || arguments == "0")
       {
         privmode(0);
       }
@@ -127,20 +130,16 @@ void bridgeLoop() // handles serial input
       {
         Serial.println("ERROR");
       }
-    }
-    else if (input.startsWith("INFO"))
-    {
+      break;
+    case INFO:
       printinfo();
-    }
-    else if (input.startsWith("SETBR"))
-    {
-      setbr(input);
-    }
-    else
-    {
+
+      break;
+    default:
       input.getBytes(buf_send, BUFFER_SIZE);
       buf_size = input.length();
       send_timeout = micros() + timeout_micros;
+      break;
     }
   }
 
@@ -154,6 +153,18 @@ void bridgeLoop() // handles serial input
   {
     sendMsg(broadcastAddress, buf_send, DATA);
   }
+}
+command handleCommands(const String &com)
+{
+
+  for (int i = 0; i < commandCount; i++)
+  {
+    if (com == commandString[i])
+    {
+      return static_cast<command>(i); // Return the matching command enum
+    }
+  }
+  return static_cast<command>(-1); // Return an invalid enum value for unknown commands
 }
 bool isBaudRateAllowed(long baudRate)
 {

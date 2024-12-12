@@ -14,4 +14,5 @@ extern bool isBaudRateAllowed(long baudRate);
 extern void setBaudRate(long baud);
 extern void exprecovery();
 extern void setupSerial();
+extern command handleCommands(const String &com);
 #endif

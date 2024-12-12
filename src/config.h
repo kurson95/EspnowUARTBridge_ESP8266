@@ -5,6 +5,8 @@
 #include <Arduino.h>
 extern Preferences preferences;
 extern long BAUD_RATE;
+extern const char* PRIMARY_MASTER_KEY;
+extern const char* LOCAL_MASTER_KEY;
 // to large BAUDE_RATE & BUFFER_SIZE variable can cause crash. Use with caution
 #define BUFFER_SIZE 64
 // #define BUFFER_SIZE 128
@@ -22,7 +24,7 @@ extern long BAUD_RATE;
 extern uint8_t broadcastAddress[6]; // receiver mac address
 extern uint8_t LastConnAddress[32]; // Stores mac address of last conneted device
 extern uint8_t defaultAddress[32];  // defualt address
-extern char macaddr[32];            // Zwiększenie rozmiaru na 32 dla adresu MAC
+extern char macaddr[32];            
 extern uint8_t buf_send[BUFFER_SIZE]; // stores input from Serial , except commands
 extern uint8_t buf_size;
 extern uint32_t send_timeout;
@@ -31,7 +33,9 @@ extern String success;
 extern String mac;
 extern const uint32_t timeout_micros;
 extern const long allowedBaudRates[12];
-
+enum command{ADDRECV,RESRECV,SETBR,RST,HELP,REJECTUNPAIRED,INFO,SETCHAN};
+extern String commandString[];
+extern const byte commandCount;
 enum msgtype
 {
   DATA,//for data
@@ -46,5 +50,4 @@ typedef struct data
 } data;
 extern data inmsg;
 extern data outmsg;
-extern const char *commands[];
 #endif

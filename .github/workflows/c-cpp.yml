@@ -12,6 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Setup PlatformIO
+  # You may pin to the exact commit or the version.
+  # uses: n-vr/setup-platformio-action@ef5952e6a4d30c219158b781a84d31b018549c20
+      uses: n-vr/setup-platformio-action@v1.0.1
+      
+          
     - name: PlatformIO Run
   # You may pin to the exact commit or the version.
   # uses: karniv00l/platformio-run-action@e6467e68a40b381568bad448faf0a1413c72fc7f

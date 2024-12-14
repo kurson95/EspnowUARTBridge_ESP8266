@@ -15,4 +15,9 @@ extern void setBaudRate(long baud);
 extern void exprecovery();
 extern void setupSerial();
 extern command handleCommands(const String &com);
+extern void setupResetPolicy();
+#ifdef OLED
+extern void init_oled();
+extern void handle_oled(String text);
+#endif
 #endif

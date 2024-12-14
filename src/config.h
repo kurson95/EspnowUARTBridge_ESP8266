@@ -3,6 +3,22 @@
 
 #include <Preferences.h>
 #include <Arduino.h>
+#ifdef OLED 
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+
+#define OLED_RESET     -1   // Reset pin # (or -1 if sharing Arduino reset pin)
+#define SCREEN_ADDRESS 0x3C // If not work please try 0x3D
+#define OLED_SDA D5         // Stock firmware shows wrong pins
+#define OLED_SCL D6         // They swap SDA with SCL ;)
+
+extern Adafruit_SSD1306 *display;
+#endif
 extern Preferences preferences;
 extern long BAUD_RATE;
 extern const char* PRIMARY_MASTER_KEY;
@@ -33,9 +49,10 @@ extern String success;
 extern String mac;
 extern const uint32_t timeout_micros;
 extern const long allowedBaudRates[12];
-enum command{ADDRECV,RESRECV,SETBR,RST,HELP,REJECTUNPAIRED,INFO,SETCHAN};
+enum command{ADDRECV,RESRECV,SETBR,RST,HELP,REJECTUNPAIRED,INFO,AUTORST};
 extern String commandString[];
 extern const byte commandCount;
+extern bool autoresetena;
 enum msgtype
 {
   DATA,//for data

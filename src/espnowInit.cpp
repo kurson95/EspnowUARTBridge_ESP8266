@@ -94,8 +94,8 @@ void OnDataRecv(uint8_t *mac, uint8_t *incomingData, uint8_t len)
       sendMsg(LastConnAddress, (uint8_t *)"MSG ACK", ACK);
       Serial.write(msg);
       Serial1.write(inmsg.msg);
+      
       // memset(buf_recv, 0, sizeof(buf_recv));
-
       digitalWrite(LED_BUILTIN, LOW);
       memset(msg, 0, sizeof(msg));
     }
@@ -103,6 +103,7 @@ void OnDataRecv(uint8_t *mac, uint8_t *incomingData, uint8_t len)
     {
       sendMsg(LastConnAddress, (uint8_t *)"MSG NACK", ACK);
     }
+   
   }
 }
 #endif

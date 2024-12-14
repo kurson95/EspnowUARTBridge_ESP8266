@@ -1,6 +1,7 @@
 #include "commands.h"
 void reset()
 {
+
   Serial.println("REBOOTING...");
   delay(2E3);
 #ifdef ESP32
@@ -21,7 +22,10 @@ void addrecv(String input)
     preferences.putBool("privmode", true);
     Serial.println("REJECT UNKNOWN: ON");
     preferences.end();
-    reset();
+    if (autoresetena == true)
+    {
+      reset();
+    }
   }
   else if (macString.length() <= 1)
   {
@@ -30,7 +34,11 @@ void addrecv(String input)
     preferences.putBool("privmode", true);
     Serial.println("REJECT UNKNOWN: ON");
     preferences.end();
-    reset();
+
+     if (autoresetena == true)
+    {
+      reset();
+    }
   }
   else
   {
@@ -46,15 +54,19 @@ void privmode(bool mode)
     preferences.putBool("privmode", true);
     Serial.println("REJECT UNKNOWN: ON");
     preferences.end();
-    reset();
-  }
+ if (autoresetena == true)
+    {
+      reset();
+    }  }
   else
   {
     preferences.putBool("privmode", false);
     Serial.println("REJECT UNKNOWN: OFF");
     preferences.end();
-    reset();
-  }
+ if (autoresetena == true)
+    {
+      reset();
+    }  }
 }
 void printinfo()
 {
@@ -80,6 +92,8 @@ void printinfo()
 #endif
   Serial.print("BAUD RATE: ");
   Serial.println(BAUD_RATE);
+  Serial.print("AUTO RST: ");
+  Serial.println(autoresetena);
   Serial.print("SDK: ");
   Serial.println(sdk);
   Serial.print("CHIP: ");
@@ -105,10 +119,33 @@ void resrecv()
   preferences.putBool("privmode", false);
   preferences.end();
   Serial.println("REJECT UNKNOWN: OFF");
-  reset();
-}
+ if (autoresetena == true)
+    {
+      reset();
+    }}
 void setbr(String input)
 {
   long baud = input /*.substring(6)*/.toInt();
   setBaudRate(baud);
+}
+void autoreset(String input)
+{
+  preferences.begin("autoReset", false);
+  if (input == "true" || input == "1")
+  {
+    preferences.putBool("autoResetState", true);
+    preferences.end();
+    reset();
+  }
+  else if (input == "false" || input == "0")
+  {
+    preferences.putBool("autoResetState", false);
+    preferences.end();
+    reset();
+
+  }
+  else
+  {
+    Serial.println("ERROR");
+  }
 }

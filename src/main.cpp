@@ -11,13 +11,17 @@
 #endif
 void setup()
 {
+#ifdef OLED
+  init_oled();
+#endif
   setupSerial();
-  #ifdef ESP32
+#ifdef ESP32
   esp_log_level_set("*", ESP_LOG_ERROR);   // set all components to ERROR level
   esp_log_level_set("wifi", ESP_LOG_WARN); // enable WARN logs from WiFi stack
   esp_log_level_set("dhcpc", ESP_LOG_INFO);
   esp_log_level_set("espnow", ESP_LOG_INFO);
-  #endif
+#endif
+  setupResetPolicy();
   Serial1.begin(BAUD_RATE);
   pinMode(RXpin, INPUT);
   pinMode(TXpin, OUTPUT);
@@ -27,6 +31,7 @@ void setup()
   Serial.println("? HELP");
   printinfo(); // show info about board
   preferences.end();
+ 
 }
 
 void loop()
@@ -34,4 +39,7 @@ void loop()
   bridgeLoop(); // main program loop
                 /*Place your custom code HERE
                  */
+   #ifdef OLED
+  handle_oled(String(inmsg.msg));
+  #endif
 }

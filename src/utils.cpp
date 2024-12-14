@@ -115,7 +115,7 @@ void bridgeLoop() // handles serial input
       reset();
       break;
     case HELP:
-      Serial.println("ADDRECV FF:FF:FF:FF:FF:FF - Allow to specify mac address of receiver.\nRESRECV - Resets receiver address to default (broadcast mode).\nRST - reboot ESP.\n? - help.\nINFO - Show device info.\nREJECTUNPAIRED true/false - accept or reject data from unknown peer.\nSETBR - Set baud rate.\n");
+      Serial.println("ADDRECV FF:FF:FF:FF:FF:FF - Allow to specify mac address of receiver.\nRESRECV - Resets receiver address to default (broadcast mode).\nRST - reboot ESP.\n? - help.\nINFO - Show device info.\nREJECTUNPAIRED true/false - accept or reject data from unknown peer.\nSETBR - Set baud rate.\nAUTORST true/false - turn off or on auto reset after changing settings\n");
       break;
     case REJECTUNPAIRED:
       if (arguments == "true" || arguments == "1")
@@ -134,6 +134,9 @@ void bridgeLoop() // handles serial input
     case INFO:
       printinfo();
 
+      break;
+    case AUTORST:
+      autoreset(arguments);
       break;
     default:
       input.getBytes(buf_send, BUFFER_SIZE);
@@ -232,3 +235,52 @@ void setupSerial()
   preferences.end();
   Serial.begin(BAUD_RATE);
 }
+void setupResetPolicy()
+{
+  preferences.begin("autoReset", false);
+
+  if (!preferences.isKey("autoResetState"))
+  {
+    preferences.putBool("autoResetState", true);
+  }
+  bool resetState = preferences.getBool("autoResetState");
+  autoresetena = resetState;
+  preferences.end();
+}
+#ifdef OLED
+void init_oled()
+{
+  display = new Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+  // OLED used nonstandard SDA and SCL pins
+  Wire.begin(D5, D6);
+
+  // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+  if (!display->begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
+  {
+    Serial.println(F("SSD1306 allocation failed"));
+    return;
+  }
+}
+void handle_oled(String text)
+{
+  display->clearDisplay();
+  display->setTextSize(1);
+  display->setTextColor(SSD1306_WHITE);
+  display->setCursor(0, 0);
+  display->println("MAC: ");
+  display->println(macaddr);
+  display->setCursor(0, 17);
+  display->println("RECV MAC: ");
+  for (int i = 0; i < 6; i++)
+  {
+    display->printf("%02X", broadcastAddress[i]);
+    if (i < 5)
+      display->print(":");
+  }
+  display->setCursor(0, 35);
+  display->print("LAST MSG: ");
+  display->println(text);
+  display->display();
+}
+#endif

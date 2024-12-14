@@ -1,4 +1,7 @@
 #include "config.h"
+#ifdef OLED
+Adafruit_SSD1306 *display;
+#endif
 const char* PRIMARY_MASTER_KEY = "YM@2&YTEH38pHp6t";
 const char* LOCAL_MASTER_KEY = "$7FQ4x!UwTohBk&y";
 Preferences preferences;
@@ -16,7 +19,7 @@ String mac;
 String success;
 data inmsg;
 const long allowedBaudRates[] = {300, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200, 230400, 250000};
-String commandString[] = {"ADDRECV","RESRECV","SETBR","RST","HELP","REJECTUNPAIRED","INFO","SETCHAN"};
+String commandString[] = {"ADDRECV","RESRECV","SETBR","RST","HELP","REJECTUNPAIRED","INFO","AUTORST"};
 const byte commandCount = sizeof(commandString) / sizeof(commandString[0]);
-
+bool autoresetena = true;
 data outmsg;

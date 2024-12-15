@@ -21,21 +21,26 @@ Personally, I created this as a solution to the problem of esphome not being com
 - **ESP-NOW Support**: Seamlessly send and receive data across ESP8266 devices.
 - **Acknowledgment Messages**: Reliable delivery with acknowledgment for received messages.
 - **Broadcast and Private Modes**: Choose between broadcasting messages or sending to specific devices.
+- **Native OLED Support**: Display some basic info on OLED (pin D5, D6)
 ## Commands List
 
 | Command          |Arg  |Description                                                                 |
 |-------------------|----------|-------------------------------------------------------------------|
 | **ADDRECV**       | MAC|Allow specifying the receiver MAC address. If not specified, it uses the last connected device's address. |
 | **RESRECV**       | None |Sets the receiver MAC address to `FF:FF:FF:FF:FF:FF`.                      |
-| **SETBR**         | baud rate |Specify the baud rate.                                                     |
-| **REJECTUNPAIRED**| True/False|`True` - Reject messages from unknown peers, `False` - Accept all connections. |
+| **SETBR**         | baud rate |Specify the baud rate. Default: 9600                                                    |
+| **REJECTUNPAIRED**| true/false|`True` - Reject messages from unknown peers, `False` - Accept all connections. Default : false |
 | **RST**           | None |Reboot the controller.                                                    |
 | **INFO**          | None |Print system information.                                                 |
 | **?**             | None |Display help.                                                             |
+| **AUTORST**       |true/false| Set if controller should reboot automatically after chaning setting. Default: true|
+## Supported devices
+- ESP12E/F
+- ESP01S
+- Wemos D1 Mini
+- NodeMCU
+- NodeMCU with Oled
 
-## To do
-- **ESP32 support**
-- **Support for multiple receivers**
 ## Pre-compiled Binaries
 
 Download pre-compiled binaries for ESP12E/F and ESP-01S:  

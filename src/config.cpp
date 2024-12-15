@@ -1,5 +1,6 @@
 #include "config.h"
 #ifdef OLED
+/*Some global variables used in rest of program*/
 Adafruit_SSD1306 *display;
 #endif
 const char* PRIMARY_MASTER_KEY = "YM@2&YTEH38pHp6t";
@@ -23,3 +24,6 @@ String commandString[] = {"ADDRECV","RESRECV","SETBR","RST","HELP","REJECTUNPAIR
 const byte commandCount = sizeof(commandString) / sizeof(commandString[0]);
 bool autoresetena = true;
 data outmsg;
+const uint OLED_BUFF_SIZE = 15;
+char oledBuf[OLED_BUFF_SIZE];
+char oledBufSend[OLED_BUFF_SIZE];

@@ -1,4 +1,5 @@
 #include "commands.h"
+/*This file contains command functions. */
 void reset()
 {
 

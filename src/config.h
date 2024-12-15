@@ -53,6 +53,9 @@ enum command{ADDRECV,RESRECV,SETBR,RST,HELP,REJECTUNPAIRED,INFO,AUTORST};
 extern String commandString[];
 extern const byte commandCount;
 extern bool autoresetena;
+extern char oledBuf[];
+extern char oledBufSend[];
+extern const uint OLED_BUFF_SIZE;
 enum msgtype
 {
   DATA,//for data

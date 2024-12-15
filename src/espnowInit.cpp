@@ -1,6 +1,6 @@
 #include "espnowInit.h"
 #include "config.h"
-
+/*ESP-NOW related functions*/
 #ifdef ESP32
 
 esp_now_peer_info_t peerInfo;
@@ -71,7 +71,7 @@ void OnDataSent(uint8_t *mac_addr, uint8_t sendStatus)
     digitalWrite(LED_BUILTIN, HIGH);
   }
 }
-
+//Function that executes on data received 
 void OnDataRecv(uint8_t *mac, uint8_t *incomingData, uint8_t len)
 {
 
@@ -90,6 +90,7 @@ void OnDataRecv(uint8_t *mac, uint8_t *incomingData, uint8_t len)
       // memcpy(&LastConnAddress, inmsg.mac, sizeof(inmsg.mac));
 
       char msg[len];
+      memcpy(&oledBuf,inmsg.msg,OLED_BUFF_SIZE);
       sprintf(msg, "%s >> %s\n", inmsg.mac, inmsg.msg);
       sendMsg(LastConnAddress, (uint8_t *)"MSG ACK", ACK);
       Serial.write(msg);
@@ -107,10 +108,10 @@ void OnDataRecv(uint8_t *mac, uint8_t *incomingData, uint8_t len)
   }
 }
 #endif
-
+//
 void setupWiFi()
 {
-  WiFi.mode(WIFI_STA); // Tylko tryb Station
+  WiFi.mode(WIFI_STA); 
 
 #ifdef ESP32
   if (esp_now_init() != ESP_OK)

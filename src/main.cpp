@@ -40,6 +40,7 @@ void loop()
                 /*Place your custom code HERE
                  */
    #ifdef OLED
-  handle_oled(String(inmsg.msg));
+  handle_oled();
+
   #endif
 }

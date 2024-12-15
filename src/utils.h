@@ -18,6 +18,6 @@ extern command handleCommands(const String &com);
 extern void setupResetPolicy();
 #ifdef OLED
 extern void init_oled();
-extern void handle_oled(String text);
+extern void handle_oled();
 #endif
 #endif

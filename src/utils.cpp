@@ -1,6 +1,6 @@
 #include "utils.h"
-
-void printMacAddress(uint8_t *mac) // converts uint8_t mac addres for more readable format
+// converts uint8_t mac addres for more readable format
+void printMacAddress(uint8_t *mac) 
 {
   Serial.print("RCV MAC ADDR: ");
   for (int i = 0; i < 6; i++)
@@ -11,8 +11,8 @@ void printMacAddress(uint8_t *mac) // converts uint8_t mac addres for more reada
   }
   Serial.println();
 }
-
-bool charToMAC(const char *macString, uint8_t *macArray) // converts human readable mac address to format readable for ESP
+// converts human readable mac address to format readable for ESP
+bool charToMAC(const char *macString, uint8_t *macArray) 
 {
   if (strlen(macString) != 17)
     return false;
@@ -22,18 +22,21 @@ bool charToMAC(const char *macString, uint8_t *macArray) // converts human reada
   }
   return true;
 }
-bool compareMACs(const uint8_t *mac1, const uint8_t *mac2) // compares 2 mac addresses
+// compares 2 mac addresses
+bool compareMACs(const uint8_t *mac1, const uint8_t *mac2) 
 {
   return memcmp(mac1, mac2, 6) == 0;
 }
-void saveMacAddress(uint8_t *newAddress) // saves mac to flash
+ // saves mac to flash
+void saveMacAddress(uint8_t *newAddress)
 {
   preferences.putBytes("peerMac", newAddress, 6);
   // preferences.end();
   Serial.println("MAC ADDR SAVED:");
   printMacAddress(newAddress);
 }
-bool isValidMAC(const String &macString) // checks , if mac is valid
+// checks , if mac is valid
+bool isValidMAC(const String &macString) 
 {
   if (macString.length() != 17)
     return false;
@@ -43,17 +46,18 @@ bool isValidMAC(const String &macString) // checks , if mac is valid
     if (i % 3 == 2)
     {
       if (macString[i] != ':')
-        return false; // Sprawdź separator
+        return false; 
     }
     else
     {
       if (!isxdigit(macString[i]))
-        return false; // Sprawdź cyfry szesnastkowe
+        return false; 
     }
   }
   return true;
 }
-bool stringToMAC(String macString, uint8_t *macArray) // converts mac from serial to valid format
+// converts mac from serial to valid format
+bool stringToMAC(String macString, uint8_t *macArray) 
 {
   if (macString.length() != 17)
     return false; // Sprawdź długość
@@ -64,7 +68,8 @@ bool stringToMAC(String macString, uint8_t *macArray) // converts mac from seria
   }
   return true;
 }
-void sendMsg(uint8_t *mac, uint8_t *data, msgtype type) // for sending data
+// for sending data
+void sendMsg(uint8_t *mac, uint8_t *data, msgtype type) 
 {
   outmsg.type = type;
   memcpy(&outmsg.msg, data, BUFFER_SIZE);
@@ -89,17 +94,18 @@ void sendMsg(uint8_t *mac, uint8_t *data, msgtype type) // for sending data
   digitalWrite(LED_BUILTIN, LOW);
 #endif
 }
-void bridgeLoop() // handles serial input
+// handles serial input
+void bridgeLoop() 
 {
   if (Serial.available())
   {
-    String input = Serial.readStringUntil('\n'); // Odczyt danych do końca linii
-    input.trim();                                // Usunięcie białych znaków
+    String input = Serial.readStringUntil('\n'); 
+    input.trim();                                
     Serial.println("INPUT >> " + input);
-    int spaceIndex = input.indexOf(' ');
-    String commandStr = (spaceIndex == -1) ? input : input.substring(0, spaceIndex);
-    String arguments = (spaceIndex == -1) ? "" : input.substring(spaceIndex + 1);
-    command cmd = handleCommands(commandStr);
+    int spaceIndex = input.indexOf(' ');//devides input in 2 parta , based of position of SPACE
+    String commandStr = (spaceIndex == -1) ? input : input.substring(0, spaceIndex); //asign 1 half to commandsStr for check, if string is valid command
+    String arguments = (spaceIndex == -1) ? "" : input.substring(spaceIndex + 1); //asign 2 half as command argument
+    command cmd = handleCommands(commandStr);//function for checking , if input is command
     switch (cmd)
     {
     case ADDRECV:
@@ -139,6 +145,7 @@ void bridgeLoop() // handles serial input
       autoreset(arguments);
       break;
     default:
+      //if input failed all checks , prepare data for sending
       input.getBytes(buf_send, BUFFER_SIZE);
       buf_size = input.length();
       send_timeout = micros() + timeout_micros;
@@ -154,9 +161,11 @@ void bridgeLoop() // handles serial input
 
   if (buf_size > 0 && (buf_size == BUFFER_SIZE || micros() >= send_timeout))
   {
-    sendMsg(broadcastAddress, buf_send, DATA);
+    memcpy(&oledBufSend, buf_send, OLED_BUFF_SIZE); ////crop & copy input to buffer used by oled
+    sendMsg(broadcastAddress, buf_send, DATA); //send data
   }
 }
+/*Compares input with list of avaible commands */
 command handleCommands(const String &com)
 {
 
@@ -180,6 +189,7 @@ bool isBaudRateAllowed(long baudRate)
   }
   return false;
 }
+/*function for setting baud rate */
 void setBaudRate(long baud)
 {
 
@@ -196,6 +206,7 @@ void setBaudRate(long baud)
     Serial.println("ERROR");
   }
 }
+/*function for recovery if ESP crashes after changing baud rate*/
 void exprecovery()
 {
 #ifdef ESP32
@@ -213,7 +224,7 @@ void exprecovery()
   }
 
 #elif defined(ESP8266)
-  String rebootReason = ESP.getResetReason();
+  String rebootReason = ESP.getResetReason(); //check last reboot reason , and restore default value if exeption occured
   if (rebootReason == "Exception")
   {
     setBaudRate(9600);
@@ -221,6 +232,7 @@ void exprecovery()
   }
 #endif
 }
+//setup serial based on saved settings
 void setupSerial()
 {
   preferences.begin("setupSerial", false);
@@ -235,7 +247,8 @@ void setupSerial()
   preferences.end();
   Serial.begin(BAUD_RATE);
 }
-void setupResetPolicy()
+//setup reset policy based on settings . By default ESP reboot itself ,if settings had changed.
+void setupResetPolicy() 
 {
   preferences.begin("autoReset", false);
 
@@ -247,6 +260,7 @@ void setupResetPolicy()
   autoresetena = resetState;
   preferences.end();
 }
+//Oled related functions. 
 #ifdef OLED
 void init_oled()
 {
@@ -254,7 +268,7 @@ void init_oled()
 
   // OLED used nonstandard SDA and SCL pins
   Wire.begin(D5, D6);
-
+  
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if (!display->begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
   {
@@ -262,10 +276,12 @@ void init_oled()
     return;
   }
 }
-void handle_oled(String text)
+/*Function for handling OLED display. Please note that because of display size limitation, only 15 characters will be displayed*/
+void handle_oled()
 {
   display->clearDisplay();
   display->setTextSize(1);
+  display->setTextWrap(false);
   display->setTextColor(SSD1306_WHITE);
   display->setCursor(0, 0);
   display->println("MAC: ");
@@ -279,8 +295,10 @@ void handle_oled(String text)
       display->print(":");
   }
   display->setCursor(0, 35);
-  display->print("LAST MSG: ");
-  display->println(text);
+  display->print("RECV: ");
+  display->println(String(oledBuf));
+  display->print("SEND: ");
+  display->println(String(oledBufSend));
   display->display();
 }
 #endif

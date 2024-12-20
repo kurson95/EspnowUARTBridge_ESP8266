@@ -14,7 +14,7 @@ In short, it takes any information given by the serial port, except commands, an
 - **Customizable receiver MAC address**: Set your receiver MAC address
 - **Encryption**: using built-in ESP-NOW encryption
 - **Persistent Storage**: Save configuration settings in flash memory using `Preferences.h`.
-- **ESP-NOW Support**: Seamlessly send and receive data across ESP8266 devices.
+- **ESP-NOW Support**: Seamlessly send and receive data across ESP8266 & ESP32 devices.
 - **Acknowledgment Messages**: Reliable delivery with acknowledgment for received messages.
 - **Broadcast and Private Modes**: Choose between broadcasting messages or sending to specific devices.
 - **Native OLED Support**: Display some basic info on OLED (pin D5, D6)
@@ -40,7 +40,7 @@ In short, it takes any information given by the serial port, except commands, an
 
 ## Pre-compiled Binaries
 
-Download pre-compiled binaries for ESP12E/F and ESP-01S:  
+Download pre-compiled binaries:  
 [Pre-compiled binaries](https://github.com/kurson95/EspnowUARTBridge_ESP8266/releases/)
 ## Contribution
 Contributions are welcome! Please fork the repository and create a pull request for any improvements or bug fixes.

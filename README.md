@@ -1,4 +1,4 @@
-# EspnowUARTBridge for ESP8266 % ESP32
+# EspnowUARTBridge for ESP8266 & ESP32
 
 Receiver/transmitter based on the ESP-NOW protocol.
 

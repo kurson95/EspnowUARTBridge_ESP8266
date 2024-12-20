@@ -31,9 +31,15 @@ extern const char* LOCAL_MASTER_KEY;
 #define LED_BUILTIN 2
 // for software serial
 #ifdef ESP32
+#include <WiFi.h>
+#include <esp_now.h>
 #define TXpin 17
 #define RXpin 16
+extern esp_now_peer_info peerInfo;
+
 #elif defined(ESP8266)
+#include <ESP8266WiFi.h>
+#include <espnow.h>
 #define RXpin 13
 #define TXpin 15
 #endif
@@ -49,13 +55,14 @@ extern String success;
 extern String mac;
 extern const uint32_t timeout_micros;
 extern const long allowedBaudRates[12];
-enum command{ADDRECV,RESRECV,SETBR,RST,HELP,REJECTUNPAIRED,INFO,AUTORST};
+enum command{ADDRECV,RESRECV,SETBR,RST,HELP,DEUNP,INFO,AUTORST};
 extern String commandString[];
 extern const byte commandCount;
 extern bool autoresetena;
 extern char oledBuf[];
 extern char oledBufSend[];
 extern const uint OLED_BUFF_SIZE;
+extern bool enc;
 enum msgtype
 {
   DATA,//for data

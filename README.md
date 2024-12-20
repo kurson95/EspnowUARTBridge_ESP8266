@@ -1,4 +1,4 @@
-# EspnowUARTBridge for ESP8266 
+# EspnowUARTBridge for ESP8266 % ESP32
 
 Receiver/transmitter based on the ESP-NOW protocol.
 
@@ -7,10 +7,6 @@ It uses a serial interface as a data source and can be configured using commands
 ## How it works?
 
 In short, it takes any information given by the serial port, except commands, and sends it to the indicated receiver or to anything within range.
-
-## What can this be used for?
-Personally, I created this as a solution to the problem of esphome not being compatible with espnow.
-
 
 ## Features
 
@@ -29,7 +25,7 @@ Personally, I created this as a solution to the problem of esphome not being com
 | **ADDRECV**       | MAC|Allow specifying the receiver MAC address. If not specified, it uses the last connected device's address. |
 | **RESRECV**       | None |Sets the receiver MAC address to `FF:FF:FF:FF:FF:FF`.                      |
 | **SETBR**         | baud rate |Specify the baud rate. Default: 9600                                                    |
-| **REJECTUNPAIRED**| true/false|`True` - Reject messages from unknown peers, `False` - Accept all connections. Default : false |
+| **DEUNP**         | true/false|`True` - Reject messages from unknown peers, `False` - Accept all connections. Default : false |
 | **RST**           | None |Reboot the controller.                                                    |
 | **INFO**          | None |Print system information.                                                 |
 | **?**             | None |Display help.                                                             |
@@ -38,6 +34,7 @@ Personally, I created this as a solution to the problem of esphome not being com
 - ESP12E/F
 - ESP01S
 - Wemos D1 Mini
+- ESP32 DevKit
 - NodeMCU
 - NodeMCU with Oled
 

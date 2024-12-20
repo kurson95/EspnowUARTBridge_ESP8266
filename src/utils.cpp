@@ -76,12 +76,38 @@ void sendMsg(uint8_t *mac, uint8_t *data, msgtype type)
   memcpy(&outmsg.mac, macaddr, 32);
 
 #ifdef ESP32
-  esp_now_send(mac, (uint8_t *)&outmsg, sizeof(outmsg));
-  Serial.printf("%d BYTES SEND\n", sizeof(outmsg));
-  // Resetowanie rozmiaru bufora
+  esp_err_t result = esp_now_send(mac, (uint8_t *)&outmsg, sizeof(outmsg));
+printMacAddress(mac);
+Serial.print("ESP-NOW send result: ");
+switch (result) {
+    case ESP_OK:
+        Serial.println("ESP_OK: Success");
+        break;
+    case ESP_ERR_ESPNOW_NOT_INIT:
+        Serial.println("ESP_ERR_ESPNOW_NOT_INIT: ESP-NOW is not initialized");
+        break;
+    case ESP_ERR_ESPNOW_ARG:
+        Serial.println("ESP_ERR_ESPNOW_ARG: Invalid argument");
+        break;
+    case ESP_ERR_ESPNOW_INTERNAL:
+        Serial.println("ESP_ERR_ESPNOW_INTERNAL: Internal error");
+        break;
+    case ESP_ERR_ESPNOW_NO_MEM:
+        Serial.println("ESP_ERR_ESPNOW_NO_MEM: Out of memory");
+        break;
+    case ESP_ERR_ESPNOW_NOT_FOUND:
+        Serial.println("ESP_ERR_ESPNOW_NOT_FOUND: Peer not found");
+        break;
+    case ESP_ERR_ESPNOW_IF:
+        Serial.println("ESP_ERR_ESPNOW_IF: Interface error");
+        break;
+    default:
+        Serial.printf("Unknown error: %d\n", result);
+        break;
+}
+
   buf_size = 0;
   memset(buf_send, 0, sizeof(buf_send));
-  // delete[] buf_send;
   digitalWrite(LED_BUILTIN, HIGH);
 
 #elif defined(ESP8266)
@@ -121,9 +147,9 @@ void bridgeLoop()
       reset();
       break;
     case HELP:
-      Serial.println("ADDRECV FF:FF:FF:FF:FF:FF - Allow to specify mac address of receiver.\nRESRECV - Resets receiver address to default (broadcast mode).\nRST - reboot ESP.\n? - help.\nINFO - Show device info.\nREJECTUNPAIRED true/false - accept or reject data from unknown peer.\nSETBR - Set baud rate.\nAUTORST true/false - turn off or on auto reset after changing settings\n");
+      Serial.println("ADDRECV FF:FF:FF:FF:FF:FF - Allow to specify mac address of receiver.\nRESRECV - Resets receiver address to default (broadcast mode).\nRST - reboot ESP.\n? - help.\nINFO - Show device info.\nDEUNP true/false - accept or reject data from unknown peer.\nSETBR - Set baud rate.\nAUTORST true/false - turn off or on auto reset after changing settings\n");
       break;
-    case REJECTUNPAIRED:
+    case DEUNP:
       if (arguments == "true" || arguments == "1")
       {
         privmode(1);
@@ -240,9 +266,7 @@ void setupSerial()
   {
     preferences.putLong("baudRate", 9600);
     Serial.println("BAUD RATE SET: 9600");
-    preferences.end();
   }
-  preferences.begin("setupSerial", true);
   BAUD_RATE = preferences.getLong("baudRate");
   preferences.end();
   Serial.begin(BAUD_RATE);
